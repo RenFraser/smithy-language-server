@@ -27,23 +27,7 @@ jobs:
       - name: Clean and build
         run: ./gradlew clean build distZip
 
-      - name: Create release
-        uses: actions/create-release@v1
-        id: create_release
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Release
+        uses: softprops/action-gh-release@v1
         with:
-          tag_name: ${{ github.ref }}
-          release_name: Version ${{ github.ref }}
-          draft: false
-          prerelease: false
-
-      - name: Upload server asset
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./build/distributions/smithy-language-server-${{ env.VERSION }}.zip
-          asset_name: kotlin-language-server.zip
-          asset_content_type: application/zip
+          files: ./build/distributions/smithy-language-server-${{ env.VERSION }}.zip
